@@ -1,4 +1,5 @@
 #!/bin/bash
+set -xe
 if [ -z "$MYSQL_PASSWORD" ]; then
    echo "MYSQL_PASSWORD must be defined!"
    exit 1
@@ -10,10 +11,10 @@ if [ -z "$WORDPRESS_PASSWORD" ]; then
    exit 1
 fi
 
-if [ ! -f /usr/share/nginx/www/wp-config.php ]; then
-  mv /usr/share/nginx/wordpress /usr/share/nginx/www
+if [ ! -f /usr/share/nginx/installed ]; then
+  cp -Rp /usr/share/nginx/wordpress/* /usr/share/nginx/www/
   chown -R www-data:www-data /usr/share/nginx/www
-  cp /usr/share/nginx/wp-config-sample.php /usr/share/nginx/www/wp-config-sample.php
+  mv /usr/share/nginx/wp-config-sample.php /usr/share/nginx/www/wp-config.php
 
   WORDPRESS_DB="wordpress"
   #This is so the passwords show up in logs.
@@ -55,8 +56,10 @@ ENDL
 
   chown www-data:www-data /usr/share/nginx/www/wp-config.php
 
-  mysql -hmysql -uroot -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;"
-  mysql -hmysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE wordpress; GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%' IDENTIFIED BY '$WORDPRESS_PASSWORD'; FLUSH PRIVILEGES;"
+  mysql -hmysql -uroot -p$MYSQL_PASSWORD -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' WITH GRANT OPTION; FLUSH PRIVILEGES;" || true
+  mysql -hmysql -uroot -p$MYSQL_PASSWORD -e "CREATE DATABASE wordpress; GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%' IDENTIFIED BY '$WORDPRESS_PASSWORD'; FLUSH PRIVILEGES;" || true
+
+  date >> /usr/share/nginx/installed
 fi
 
 # start all the services
