@@ -12,15 +12,15 @@ The easiest way to get this docker image installed is to pull the latest version
 from the Docker registry:
 
 ```bash
-$ docker pull eugeneware/docker-wordpress-nginx
+$ docker pull makanab/docker-wordpress-nginx
 ```
 
 If you'd like to build the image yourself then:
 
 ```bash
-$ git clone https://github.com/eugeneware/docker-wordpress-nginx.git
+$ git clone https://github.com/makanab/docker-wordpress-nginx.git
 $ cd docker-wordpress-nginx
-$ sudo docker build -t="eugeneware/docker-wordpress-nginx" .
+$ sudo docker build -t="makanab/docker-wordpress-nginx" .
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ $ sudo docker build -t="eugeneware/docker-wordpress-nginx" .
 To spawn a new instance of wordpress on port 80.  The -p 80:80 maps the internal docker port 80 to the outside port 80 of the host machine.
 
 ```bash
-$ sudo docker run -p 80:80 --name docker-wordpress-nginx -d eugeneware/docker-wordpress-nginx
+$ sudo docker run -p 80:80 --name docker-wordpress-nginx -d --link mysql:mysql -e WORDPRESS_PASSWORD="whatever" -e MYSQL_PASSWORD="whatever" makanab/docker-wordpress-nginx
 ```
 
 Start your newly created docker.
