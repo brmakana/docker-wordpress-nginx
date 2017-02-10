@@ -42,10 +42,7 @@ ADD ./supervisord.conf /etc/supervisord.conf
 ADD https://wordpress.org/latest.tar.gz /usr/share/nginx/latest.tar.gz
 RUN cd /usr/share/nginx/ && tar xvf latest.tar.gz && rm latest.tar.gz
 RUN mv /usr/share/nginx/html/5* /usr/share/nginx/wordpress
-RUN rm -rf /usr/share/nginx/www
-RUN mv /usr/share/nginx/wordpress /usr/share/nginx/www
-RUN chown -R www-data:www-data /usr/share/nginx/www
-COPY wp-config-sample.php /usr/share/nginx/www/wp-config-sample.php
+COPY wp-config-sample.php /usr/share/nginx/wp-config-sample.php
 
 # Wordpress Initialization and Startup Script
 ADD ./start.sh /start.sh
@@ -55,7 +52,7 @@ RUN chmod 755 /start.sh
 EXPOSE 3306
 EXPOSE 80
 
-# volume for mysql database and wordpress install
+# volume for wordpress install
 VOLUME ["/usr/share/nginx/www"]
 
 CMD ["/bin/bash", "/start.sh"]

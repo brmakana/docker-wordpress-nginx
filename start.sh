@@ -11,7 +11,10 @@ if [ -z "$WORDPRESS_PASSWORD" ]; then
 fi
 
 if [ ! -f /usr/share/nginx/www/wp-config.php ]; then
-  # Here we generate random passwords (thank you pwgen!). The first two are for mysql users, the last batch for random keys in wp-config.php
+  mv /usr/share/nginx/wordpress /usr/share/nginx/www
+  chown -R www-data:www-data /usr/share/nginx/www
+  cp /usr/share/nginx/wp-config-sample.php /usr/share/nginx/www/wp-config-sample.php
+
   WORDPRESS_DB="wordpress"
   #This is so the passwords show up in logs.
   echo mysql root password: $MYSQL_PASSWORD
@@ -31,6 +34,7 @@ if [ ! -f /usr/share/nginx/www/wp-config.php ]; then
   /'NONCE_SALT'/s/put your unique phrase here/`pwgen -c -n -1 65`/" /usr/share/nginx/www/wp-config-sample.php > /usr/share/nginx/www/wp-config.php
 
   # Download nginx helper plugin
+  mkdir -p /usr/share/nginx/www/wp-content/
   curl -O `curl -i -s https://wordpress.org/plugins/nginx-helper/ | egrep -o "https://downloads.wordpress.org/plugin/[^']+"`
   unzip -o nginx-helper.*.zip -d /usr/share/nginx/www/wp-content/plugins
   chown -R www-data:www-data /usr/share/nginx/www/wp-content/plugins/nginx-helper

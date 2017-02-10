@@ -37,6 +37,9 @@ define('DB_CHARSET', 'utf8');
 /** The Database Collate type. Don't change this if in doubt. */
 define('DB_COLLATE', '');
 
+define('WP_HOME','http://resist.trump.at.the.cattle.pen.makanaissance.com');
+define('WP_SITEURL','http://resist.trump.at.the.cattle.pen.makanaissance.com');
+
 /**#@+
  * Authentication Unique Keys and Salts.
  *
